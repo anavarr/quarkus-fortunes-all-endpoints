@@ -1,0 +1,8 @@
+@font-face {
+  font-family: pirates;
+  src: url('./BlackPirates.otf');
+}
+
+body{
+    font-family: pirates, fantasy;
+}
