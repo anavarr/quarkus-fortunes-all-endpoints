@@ -66,6 +66,8 @@ public class FortuneRepository {
             while (rs.next()) {
                 fortunes.add(create(rs));
             }
+            rs.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             logger.warn("Unable to retrieve fortunes from the database", e);
         } finally {

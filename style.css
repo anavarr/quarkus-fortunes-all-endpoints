@@ -1,8 +1,0 @@
-@font-face {
-  font-family: pirates;
-  src: url(src/main/resources/BlackPirates.otf);
-}
-
-body{
-    font-family: pirates;
-}
