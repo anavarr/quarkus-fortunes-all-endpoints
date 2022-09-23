@@ -9,8 +9,10 @@
   <properties>
     <quarkus.version>999-SNAPSHOT</quarkus.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>19</maven.compiler.source>
+    <maven.compiler.target>19</maven.compiler.target>
+    <maven.compiler>true</maven.compiler>
+    <maven.compiler.forceJavacCompilerUse>true</maven.compiler.forceJavacCompilerUse>
   </properties>
 
   <dependencyManagement>
@@ -107,6 +109,15 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <source>19</source>
+          <target>19</target>
+          <compilerArgs>
+            <arg>--enable-preview</arg>
+            <arg>-Dnet.bytebuddy.experimental</arg>
+          </compilerArgs>
+          <jvmArgs>--enable-preview --add-opens java.base/java.lang=ALL-UNNAMED</jvmArgs>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>io.quarkus</groupId>

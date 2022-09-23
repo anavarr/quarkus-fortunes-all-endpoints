@@ -2,6 +2,7 @@ package io.quarkus.fortune.resource;
 
 import io.quarkus.fortune.model.Fortune;
 import io.quarkus.fortune.repository.FortuneRepository;
+import io.smallrye.common.annotation.NonBlocking;
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.smallrye.mutiny.Uni;
 
@@ -49,6 +50,53 @@ public class FortuneResource  {
     public Fortune loom() {
         var list = repository.findAllAsyncAndAwait();
         return pickOne(list);
+    }
+
+    @GET
+    @RunOnVirtualThread
+    @NonBlocking
+    @Path("/get_virtual")
+    public List<Fortune> getVirtual() {
+        System.out.println("in a virtual-thread"+Thread.currentThread());
+        return repository.findAllDeadLockPrint().await().indefinitely();
+    }
+
+    @GET
+    @RunOnVirtualThread
+    @NonBlocking
+    @Path("/get_eventloop")
+    public Uni<List<Fortune>> getReactive() {
+        System.out.println("in an event-loop"+Thread.currentThread());
+        return repository.findAllDeadLockPrint();
+    }
+
+    @GET
+    @RunOnVirtualThread
+    @NonBlocking
+    @Path("/print-inner")
+    public List<Fortune> getAllInner() {
+        var list = repository.findAllDeadLockPrint();
+        return list.await().indefinitely();
+    }
+
+    @GET
+    @RunOnVirtualThread
+    @NonBlocking
+    @Path("/print-outer")
+    public List<Fortune> getAllOuter() {
+        System.out.println("outer - "+Thread.currentThread());
+        var list = repository.findAllDeadLock();
+        return list.await().indefinitely();
+    }
+
+    @GET
+    @RunOnVirtualThread
+    @NonBlocking
+    @Path("/print-both")
+    public List<Fortune> getAll() {
+        System.out.println("outer - "+Thread.currentThread());
+        var list = repository.findAllDeadLockPrint();
+        return list.await().indefinitely();
     }
 
     private Fortune pickOne(List<Fortune> list) {

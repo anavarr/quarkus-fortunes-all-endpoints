@@ -50,6 +50,23 @@ public class FortuneRepository {
 
     }
 
+    public Uni<List<Fortune>> findAllDeadLock() {
+        return db.getPool().preparedQuery(SELECT_ALL)
+                .execute()
+                .map(item -> {
+                    return createListOfFortunes(item);
+                });
+    }
+
+    public Uni<List<Fortune>> findAllDeadLockPrint() {
+        return db.getPool().preparedQuery(SELECT_ALL)
+                .execute()
+                .map(item -> {
+                    System.out.println("inner - "+Thread.currentThread());
+                    return createListOfFortunes(item);
+                });
+    }
+
     public List<Fortune> findAllAsyncAndAwait() {
         var rows = db.getPool().preparedQuery(SELECT_ALL)
                 .executeAndAwait();
